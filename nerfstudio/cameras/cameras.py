@@ -902,6 +902,8 @@ class Cameras(TensorDataclass):
         else:
             metadata = {"directions_norm": directions_norm[0].detach()}
 
+        metadata["rotations"] = rotation.flatten(-2)
+
         return RayBundle(
             origins=origins,
             directions=directions,
