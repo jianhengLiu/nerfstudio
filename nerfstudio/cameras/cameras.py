@@ -903,6 +903,13 @@ class Cameras(TensorDataclass):
             metadata = {"directions_norm": directions_norm[0].detach()}
 
         metadata["rotations"] = rotation.flatten(-2)
+        metadata["fx"] = fx.unsqueeze(-1)
+        metadata["fy"] = fy.unsqueeze(-1)
+        metadata["cx"] = cx.unsqueeze(-1)
+        metadata["cy"] = cy.unsqueeze(-1)
+        metadata["width"] = self.width[0].expand(fx.shape).unsqueeze(-1)
+        metadata["height"] = self.height[0].expand(fx.shape).unsqueeze(-1)
+        metadata["distortion_params"] = distortion_params
 
         return RayBundle(
             origins=origins,
