@@ -907,9 +907,20 @@ class Cameras(TensorDataclass):
         metadata["fy"] = fy.unsqueeze(-1)
         metadata["cx"] = cx.unsqueeze(-1)
         metadata["cy"] = cy.unsqueeze(-1)
-        metadata["width"] = self.width[0].expand(fx.shape).unsqueeze(-1)
-        metadata["height"] = self.height[0].expand(fx.shape).unsqueeze(-1)
-        metadata["distortion_params"] = distortion_params
+        metadata["width"] = self.width[0].expand(fx.shape + (1,))
+        metadata["height"] = self.height[0].expand(fx.shape + (1,))
+        if distortion_params is None:
+            distortion_params = camera_utils.get_distortion_params(
+                k1=0.0,
+                k2=0.0,
+                k3=0.0,
+                k4=0.0,
+                p1=0.0,
+                p2=0.0,
+            ).expand(fx.shape + (6,))
+            metadata["distortion_params"] = distortion_params
+        else:
+            metadata["distortion_params"] = distortion_params
 
         return RayBundle(
             origins=origins,
