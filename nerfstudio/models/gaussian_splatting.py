@@ -607,7 +607,8 @@ class GaussianSplattingModel(Model):
             return {"rgb": background.repeat(int(camera.height.item()), int(camera.width.item()), 1)}
 
         # Important to allow xys grads to populate properly
-        if self.training:
+        # if self.training:
+        if self.xys.requires_grad:
             self.xys.retain_grad()
         if self.config.sh_degree > 0:
             viewdirs = means_crop.detach() - camera.camera_to_worlds.detach()[..., :3, 3]  # (N, 3)
