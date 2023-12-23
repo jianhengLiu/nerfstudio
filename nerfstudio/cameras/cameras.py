@@ -902,6 +902,7 @@ class Cameras(TensorDataclass):
         else:
             metadata = {"directions_norm": directions_norm[0].detach()}
 
+        metadata["coords"] = coords
         metadata["rotations"] = rotation.flatten(-2)
         metadata["fx"] = fx.unsqueeze(-1)
         metadata["fy"] = fy.unsqueeze(-1)
