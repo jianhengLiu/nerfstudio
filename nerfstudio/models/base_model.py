@@ -201,7 +201,10 @@ class Model(nn.Module):
                 outputs_lists[output_name].append(output.to(input_device))
         outputs = {}
         for output_name, outputs_list in outputs_lists.items():
-            outputs[output_name] = torch.cat(outputs_list).view(image_height, image_width, -1)  # type: ignore
+            try:
+                outputs[output_name] = torch.cat(outputs_list).view(image_height, image_width, -1)  # type: ignore
+            except:
+                print(f"Error concatenating {output_name}")
         return outputs
 
     def get_rgba_image(self, outputs: Dict[str, torch.Tensor], output_name: str = "rgb") -> torch.Tensor:
